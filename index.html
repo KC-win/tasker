@@ -329,11 +329,11 @@ function login(){
   const name=document.getElementById('login-input').value.trim();
   if(!name)return;
   currentUser={name,color:ucolor(name)};
-  sessionStorage.setItem('tasker_user',JSON.stringify(currentUser));
+  localStorage.setItem('tasker_user',JSON.stringify(currentUser));
   showApp();
 }
 function logout(){
-  sessionStorage.removeItem('tasker_user');currentUser=null;tasks=[];sublists=[];sublistItems={};
+  localStorage.removeItem('tasker_user');currentUser=null;tasks=[];sublists=[];sublistItems={};
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('login-input').value='';
@@ -655,7 +655,7 @@ document.getElementById('add-input').addEventListener('input',function(){
 });
 document.querySelector('.filter-btn.active').style.background='var(--text)';
 document.querySelector('.filter-btn.active').style.color='#000';
-const saved=sessionStorage.getItem('tasker_user');
+const saved=localStorage.getItem('tasker_user');
 if(saved){currentUser=JSON.parse(saved);showApp();}
 </script>
 </body>
