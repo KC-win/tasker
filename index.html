@@ -12,6 +12,66 @@
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 10% 10%,rgba(91,138,245,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 90%,rgba(167,139,250,0.06) 0%,transparent 60%)}
 
+
+/* ── SETTINGS MODAL ─────────────────────────────────────────────────────── */
+.settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.settings-overlay.open{display:flex}
+.settings-sheet{background:var(--surface);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:720px;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.settings-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 24px}
+.settings-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.settings-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.settings-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px}
+
+/* Theme presets */
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.theme-swatch{border:2px solid transparent;border-radius:14px;padding:14px 10px;cursor:pointer;transition:all .2s;text-align:center;background:var(--surface2)}
+.theme-swatch.active{border-color:var(--accent)}
+.theme-swatch:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.15)}
+.theme-swatch-preview{width:100%;height:36px;border-radius:8px;margin-bottom:8px}
+.theme-swatch-name{font-size:12px;font-weight:600}
+
+/* Custom color pickers */
+.custom-colors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.color-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.color-row-label{font-size:13px;font-weight:500}
+.color-row-right{display:flex;align-items:center;gap:10px}
+.color-preview{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.1)}
+.color-input-wrap{position:relative;overflow:hidden;width:36px;height:36px;border-radius:10px;cursor:pointer}
+.color-input-wrap input[type=color]{position:absolute;inset:-4px;width:calc(100%+8px);height:calc(100%+8px);border:none;cursor:pointer;opacity:0}
+.color-input-wrap .color-btn{width:100%;height:100%;border:1.5px solid rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;pointer-events:none}
+.settings-btn-row{display:flex;gap:10px}
+.settings-close-btn{flex:1;font-family:var(--font);font-size:14px;font-weight:600;padding:13px;border-radius:12px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+.settings-close-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.settings-reset-btn{font-family:var(--font);font-size:13px;font-weight:600;padding:13px 20px;border-radius:12px;border:none;background:rgba(248,113,113,.15);color:#f87171;cursor:pointer;transition:all .2s}
+.settings-reset-btn:hover{background:rgba(248,113,113,.25)}
+
+/* Settings gear button in header */
+.settings-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-right:8px}
+.settings-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text);transform:rotate(30deg)}
+
+
+/* Owner filter tabs */
+.owner-tabs{display:flex;gap:6px;margin-bottom:16px}
+.owner-tab{flex:1;font-family:var(--font);font-size:13px;font-weight:600;padding:9px 10px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .2s;text-align:center}
+.owner-tab:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+.owner-tab.active{color:#fff;border-color:transparent}
+.owner-tab.mine.active{background:var(--accent)}
+.owner-tab.others.active{background:#f472b6}
+.owner-tab.common.active{background:#fbbf24;color:#000}
+
+/* Assign toggle on add-meta */
+.assign-toggle{display:flex;gap:6px;align-items:center}
+.assign-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+.assign-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.assign-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+
+/* Task owner indicator */
+.task-owner-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.8px;margin-left:4px}
+.task-owner-tag.mine{background:rgba(91,138,245,.2);color:var(--accent)}
+.task-owner-tag.common{background:rgba(251,191,36,.2);color:#fbbf24}
+.task-owner-tag.others{background:rgba(244,114,182,.2);color:#f472b6}
+
 /* LOGIN */
 .login-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg)}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:360px;text-align:center}
@@ -210,10 +270,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <div class="app" id="app">
   <header class="header">
     <div class="logo">task<span>er</span></div>
+    <div style="display:flex;align-items:center;gap:0">
+      <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
     <div class="user-pill">
       <div class="user-avatar" id="user-avatar"></div>
       <span class="user-name" id="user-name-label"></span>
       <button class="logout-btn" onclick="logout()">← Leave</button>
+    </div>
     </div>
   </header>
 
@@ -223,20 +286,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="tab-btn" id="tab-sublists" onclick="switchTab('sublists')">📝 Lists</button>
   </div>
 
-  <!-- Online bar -->
-  <div class="online-bar">
-    <div class="online-dot"></div>
-    <span class="online-text">Live sync active — <strong>changes appear instantly for everyone</strong></span>
-  </div>
+
 
   <!-- TASKS TAB -->
   <div id="tasks-tab">
-    <div class="stats">
-      <div class="stat-card"><div class="stat-value" id="stat-remaining" style="color:var(--accent)">0</div><div class="stat-label">Remaining</div></div>
-      <div class="stat-card"><div class="stat-value" id="stat-done" style="color:var(--green)">0</div><div class="stat-label">Done</div></div>
-      <div class="stat-card"><div class="stat-value" id="stat-pct" style="color:var(--accent2)">0%</div><div class="stat-label">Complete</div></div>
+
+
+    <!-- Owner filter -->
+    <div class="owner-tabs">
+      <button class="owner-tab mine active" id="otab-all" onclick="setOwnerFilter('all',this)">👥 All Tasks</button>
+      <button class="owner-tab mine" id="otab-mine" onclick="setOwnerFilter('mine',this)">🙋 My Tasks</button>
+      <button class="owner-tab others" id="otab-others" onclick="setOwnerFilter('others',this)">👤 Others</button>
+      <button class="owner-tab common" id="otab-common" onclick="setOwnerFilter('common',this)">🤝 Common</button>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 
     <div class="filters">
       <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
@@ -255,12 +317,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
       <div class="add-meta" id="add-meta">
         <select class="meta-select" id="cat-select">
           <option value="Work">💼 Work</option>
-          <option value="Personal">👤 Personal</option>
+          <option value="Personal" selected>👤 Personal</option>
           <option value="Urgent">🔥 Urgent</option>
           <option value="Meetings">👥 Meetings</option>
           <option value="Admin">📄 Admin</option>
         </select>
-        <input type="date" class="date-input" id="due-input">
+        <input type="date" class="date-input" id="due-input"><input type="time" class="date-input" id="time-input" placeholder="Time (optional)" style="width:130px">
+        <div class="assign-toggle">
+          <span class="assign-label">Assign:</span>
+          <button class="assign-btn active" id="assign-mine" onclick="setAssign('mine')">Mine</button>
+          <button class="assign-btn" id="assign-common" onclick="setAssign('common')">Common</button>
+        </div>
         <button class="btn btn-ghost" onclick="hideMeta()" style="margin-left:auto">Cancel</button>
       </div>
     </div>
@@ -319,7 +386,7 @@ const UCOLORS=['#5b8af5','#34d399','#f87171','#fbbf24','#a78bfa','#fb923c','#f47
 const EMOJIS=['🛒','📦','🏠','🎉','💪','✈️','📚','🍔','💊','🎁','🔧','💻','🏋️','🌿','💰','🎯','🐾','🧹'];
 const LIST_COLORS=['#5b8af5','#34d399','#f87171','#fbbf24','#a78bfa','#fb923c','#f472b6','#22d3ee'];
 
-let tasks=[],sublists=[],sublistItems={},currentUser=null,currentFilter='all',showComp=true,dragSrc=null,selectedEmoji='🛒',currentTab='tasks',expandedLists=new Set();
+let tasks=[],sublists=[],sublistItems={},currentUser=null,currentFilter='all',ownerFilter='all',taskAssign='mine',showComp=true,dragSrc=null,selectedEmoji='🛒',currentTab='tasks',expandedLists=new Set(),collapsedLists=new Set();
 
 function ucolor(n){let h=0;for(let c of n)h=c.charCodeAt(0)+((h<<5)-h);return UCOLORS[Math.abs(h)%UCOLORS.length]}
 function lcolor(id){let h=0;for(let c of id)h=c.charCodeAt(0)+((h<<5)-h);return LIST_COLORS[Math.abs(h)%LIST_COLORS.length]}
@@ -368,10 +435,13 @@ async function addTask(){
   const title=input.value.trim();if(!title)return;
   const cat=document.getElementById('cat-select').value;
   const due=document.getElementById('due-input').value;
+  const time=document.getElementById('time-input').value;
   const maxPos=tasks.filter(t=>!t.done).reduce((m,t)=>Math.max(m,t.position||0),0);
-  const{error}=await db.from('tasks').insert({title,category:cat,due_date:due||null,done:false,created_by:currentUser.name,position:maxPos+1});
+  const dueFull=due?(time?due+'T'+time:due):null;
+  const ttype=taskAssign==='common'?'common':'personal';
+  const{error}=await db.from('tasks').insert({title,category:cat,due_date:dueFull||null,done:false,created_by:currentUser.name,position:maxPos+1,task_type:ttype});
   if(error){showToast('Error adding task');return;}
-  input.value='';document.getElementById('due-input').value='';
+  input.value='';document.getElementById('due-input').value='';document.getElementById('time-input').value='';setAssign('mine');
   document.getElementById('add-btn').disabled=true;hideMeta();showToast('Task added ✓');
 }
 async function toggleDone(id){
@@ -446,8 +516,8 @@ async function deleteItem(id){
 }
 
 function toggleListExpand(id){
-  if(expandedLists.has(id))expandedLists.delete(id);
-  else expandedLists.add(id);
+  if(collapsedLists.has(id))collapsedLists.delete(id);
+  else collapsedLists.add(id);
   renderSublists();
 }
 
@@ -456,16 +526,34 @@ function renderTasks(){
   const active=tasks.filter(t=>!t.done&&mf(t));
   const done=tasks.filter(t=>t.done&&mf(t)).sort((a,b)=>new Date(b.completed_at||0)-new Date(a.completed_at||0));
   const allA=tasks.filter(t=>!t.done).length,allD=tasks.filter(t=>t.done).length,tot=tasks.length,pct=tot?Math.round(allD/tot*100):0;
-  document.getElementById('stat-remaining').textContent=allA;
-  document.getElementById('stat-done').textContent=allD;
-  document.getElementById('stat-pct').textContent=pct+'%';
-  document.getElementById('progress-fill').style.width=pct+'%';
+  const _sr=document.getElementById('stat-remaining');if(_sr)_sr.textContent=allA;
+  const _sd=document.getElementById('stat-done');if(_sd)_sd.textContent=allD;
+  const _sp=document.getElementById('stat-pct');if(_sp)_sp.textContent=pct+'%';
+  const _pf=document.getElementById('progress-fill');if(_pf)_pf.style.width=pct+'%';
   document.getElementById('active-count').textContent=active.length;
   document.getElementById('completed-count').textContent=done.length;
   renderTaskList('active-list',active,false);
   renderTaskList('completed-list',done,true);
 }
-function mf(t){return currentFilter==='all'||t.category===currentFilter}
+function mf(t){
+  const catOk = currentFilter==='all'||t.category===currentFilter;
+  let ownerOk = true;
+  if(ownerFilter==='mine')    ownerOk = t.created_by===currentUser?.name && t.task_type!=='common';
+  if(ownerFilter==='others')  ownerOk = t.created_by!==currentUser?.name && t.task_type!=='common';
+  if(ownerFilter==='common')  ownerOk = t.task_type==='common';
+  return catOk && ownerOk;
+}
+function setOwnerFilter(f, btn){
+  ownerFilter=f;
+  document.querySelectorAll('.owner-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTasks();
+}
+function setAssign(type){
+  taskAssign=type;
+  document.getElementById('assign-mine').classList.toggle('active', type==='mine');
+  document.getElementById('assign-common').classList.toggle('active', type==='common');
+}
 function renderTaskList(id,items,isDone){
   const el=document.getElementById(id);
   if(!items.length){el.innerHTML=!isDone?'<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No active tasks!</div><div class="empty-sub">Add a task above.</div></div>':'';return;}
@@ -473,7 +561,7 @@ function renderTaskList(id,items,isDone){
   if(!isDone)el.querySelectorAll('.task-item').forEach(r=>{r.addEventListener('dragstart',onDS);r.addEventListener('dragover',onDO);r.addEventListener('dragleave',onDL);r.addEventListener('drop',onDP);r.addEventListener('dragend',onDE);});
 }
 function tHTML(t,i,tot,isDone){
-  const cat=CATS[t.category]||CATS.Work,due=fmtDue(t.due_date),dc=due==='Today'?'today':due==='Overdue'?'overdue':'',ac=ucolor(t.created_by||'?'),isMe=t.created_by===currentUser?.name;
+  const cat=CATS[t.category]||CATS.Work,due=fmtDue(t.due_date),dc=due==='Today'?'today':due==='Overdue'?'overdue':'',ac=ucolor(t.created_by||'?'),isMe=t.created_by===currentUser?.name;const isCommon=t.task_type==='common';const ownerTagClass=isCommon?'common':isMe?'mine':'others';const ownerTagText=isCommon?'🤝 Common':isMe?'':'';
   return '<div class="task-item '+(isDone?'completed':'')+'" data-id="'+t.id+'" draggable="'+(!isDone)+'">'
     +(!isDone?'<span class="drag-handle">⠿</span>':'')
     +'<button class="check-btn '+(isDone?'done':'')+'" onclick="toggleDone(\''+t.id+'\')">'
@@ -481,6 +569,7 @@ function tHTML(t,i,tot,isDone){
     +'<div class="task-body"><div class="task-title">'+esc(t.title)+'</div>'
     +'<div class="task-meta"><span class="cat-badge" style="color:'+cat.color+';background:'+cat.bg+'">'+cat.icon+' '+t.category+'</span>'
     +(due?'<span class="due-badge '+dc+'">📅 '+due+'</span>':'')
+    +(isCommon?'<span class="task-owner-tag common">🤝 Common</span>':'')
     +'<span class="added-by"><span class="added-by-dot" style="background:'+ac+'">'+(t.created_by||'?')[0].toUpperCase()+'</span>'+(isMe?'You':esc(t.created_by||'?'))+'</span></div></div>'
     +'<div class="task-actions">'
     +(!isDone?'<button class="action-btn" onclick="moveUp(\''+t.id+'\')"'+(i===0?' style="opacity:.3;cursor:default"':'')+'>↑</button>'
@@ -500,7 +589,7 @@ function sublistCardHTML(sl){
   const total=items.length,done=items.filter(i=>i.done).length;
   const pct=total?Math.round(done/total*100):0;
   const color=lcolor(sl.id);
-  const isOpen=expandedLists.has(sl.id);
+  const isOpen=!collapsedLists.has(sl.id);
 
   let itemsHTML='';
   if(isOpen){
@@ -636,9 +725,11 @@ function toggleCompleted(){
 }
 function fmtDue(due){
   if(!due)return'';
+  const hasTime=due.includes('T') && due.length>10;
   const today=new Date();today.setHours(0,0,0,0);
   const d=new Date(due+'T00:00:00');
   if(d<today)return'Overdue';
+  const timeStr=hasTime?(' '+new Date(due).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})):'';
   if(d.getTime()===today.getTime())return'Today';
   const tom=new Date(today);tom.setDate(today.getDate()+1);
   if(d.getTime()===tom.getTime())return'Tomorrow';
@@ -657,6 +748,167 @@ document.querySelector('.filter-btn.active').style.background='var(--text)';
 document.querySelector('.filter-btn.active').style.color='#000';
 const saved=localStorage.getItem('tasker_user');
 if(saved){currentUser=JSON.parse(saved);showApp();}
+
+// ── THEME SYSTEM ──────────────────────────────────────────────────────────────
+const THEMES = [
+  { name:'Default',   accent:'#5b8af5', accent2:'#a78bfa', bg:'#0e0f14', surface:'#16181f' },
+  { name:'Emerald',   accent:'#10b981', accent2:'#34d399', bg:'#0a0f0d', surface:'#111a14' },
+  { name:'Sunset',    accent:'#f97316', accent2:'#fb923c', bg:'#120c08', surface:'#1c1108' },
+  { name:'Rose',      accent:'#f43f5e', accent2:'#fb7185', bg:'#110810', surface:'#1c0f1c' },
+  { name:'Gold',      accent:'#c9973a', accent2:'#e8b96a', bg:'#0e0c08', surface:'#181408' },
+  { name:'Cyan',      accent:'#06b6d4', accent2:'#22d3ee', bg:'#080e10', surface:'#0e1618' },
+  { name:'Violet',    accent:'#7c3aed', accent2:'#a78bfa', bg:'#0c0810', surface:'#140f1c' },
+  { name:'Slate',     accent:'#94a3b8', accent2:'#cbd5e1', bg:'#0a0c10', surface:'#141720' },
+];
+const THEME_KEY = 'tasker_theme';
+
+function applyTheme(theme, save=true) {
+  const r = document.documentElement.style;
+  r.setProperty('--accent',  theme.accent);
+  r.setProperty('--accent2', theme.accent2);
+  r.setProperty('--bg',      theme.bg);
+  r.setProperty('--surface', theme.surface);
+  // Derive surface2 by lightening surface slightly
+  r.setProperty('--surface2', lighten(theme.surface, 8));
+  // Update gradient bg
+  document.body.style.setProperty('--grad1', theme.accent);
+  document.body.style.setProperty('--grad2', theme.accent2);
+  if (save) localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+  syncColorPickers(theme);
+  renderThemeGrid(theme);
+}
+
+function lighten(hex, pct) {
+  const n = parseInt(hex.replace('#',''), 16);
+  const r = Math.min(255, (n>>16) + pct);
+  const g = Math.min(255, ((n>>8)&0xff) + pct);
+  const b = Math.min(255, (n&0xff) + pct);
+  return '#' + [r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+function applyCustomColor(key, val) {
+  document.documentElement.style.setProperty('--'+key, val);
+  const cur = getCurrentTheme();
+  cur[key] = val;
+  localStorage.setItem(THEME_KEY, JSON.stringify(cur));
+  syncColorPickers(cur);
+  renderThemeGrid(null); // deselect presets
+}
+
+function getCurrentTheme() {
+  return {
+    accent:  getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
+    accent2: getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim(),
+    bg:      getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(),
+    surface: getComputedStyle(document.documentElement).getPropertyValue('--surface').trim(),
+  };
+}
+
+function syncColorPickers(theme) {
+  const keys = ['accent','accent2','bg','surface'];
+  keys.forEach(k => {
+    const inp = document.getElementById('custom-'+k);
+    const prev = document.getElementById('preview-'+k);
+    if (inp) inp.value = theme[k] || '#000000';
+    if (prev) prev.style.background = theme[k] || '#000000';
+  });
+}
+
+function renderThemeGrid(activeTheme) {
+  const grid = document.getElementById('theme-grid');
+  if (!grid) return;
+  grid.innerHTML = THEMES.map(t => {
+    const isActive = activeTheme && t.accent === activeTheme.accent && t.bg === activeTheme.bg;
+    return `<div class="theme-swatch ${isActive?'active':''}" onclick="applyTheme(${JSON.stringify(t)})">
+      <div class="theme-swatch-preview" style="background:linear-gradient(135deg,${t.bg} 0%,${t.surface} 40%,${t.accent} 100%)"></div>
+      <div class="theme-swatch-name">${t.name}</div>
+    </div>`;
+  }).join('');
+}
+
+function resetTheme() {
+  localStorage.removeItem(THEME_KEY);
+  applyTheme(THEMES[0]);
+}
+
+function openSettings() {
+  document.getElementById('settings-overlay').classList.add('open');
+  renderThemeGrid(getCurrentTheme());
+  syncColorPickers(getCurrentTheme());
+}
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
+function closeSettingsOutside(e) { if(e.target===document.getElementById('settings-overlay')) closeSettings(); }
+
+// Load saved theme on start
+(function() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) { try { applyTheme(JSON.parse(saved), false); } catch(e){} }
+})();
+
 </script>
+
+<!-- Settings Modal -->
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettingsOutside(event)">
+  <div class="settings-sheet" id="settings-sheet">
+    <div class="settings-handle"></div>
+    <div class="settings-title">⚙️ Settings</div>
+    <div class="settings-sub">Customize your Tasker experience</div>
+
+    <div class="settings-section-label">Theme Presets</div>
+    <div class="theme-grid" id="theme-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="settings-section-label">Custom Colors</div>
+    <div class="custom-colors">
+      <div class="color-row">
+        <div class="color-row-label">Accent</div>
+        <div class="color-row-right">
+          <div class="color-preview" id="preview-accent"></div>
+          <div class="color-input-wrap">
+            <div class="color-btn">🎨</div>
+            <input type="color" id="custom-accent" oninput="applyCustomColor('accent',this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="color-row">
+        <div class="color-row-label">Highlight</div>
+        <div class="color-row-right">
+          <div class="color-preview" id="preview-accent2"></div>
+          <div class="color-input-wrap">
+            <div class="color-btn">🎨</div>
+            <input type="color" id="custom-accent2" oninput="applyCustomColor('accent2',this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="color-row">
+        <div class="color-row-label">Background</div>
+        <div class="color-row-right">
+          <div class="color-preview" id="preview-bg"></div>
+          <div class="color-input-wrap">
+            <div class="color-btn">🎨</div>
+            <input type="color" id="custom-bg" oninput="applyCustomColor('bg',this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="color-row">
+        <div class="color-row-label">Surface</div>
+        <div class="color-row-right">
+          <div class="color-preview" id="preview-surface"></div>
+          <div class="color-input-wrap">
+            <div class="color-btn">🎨</div>
+            <input type="color" id="custom-surface" oninput="applyCustomColor('surface',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-btn-row">
+      <button class="settings-reset-btn" onclick="resetTheme()">Reset</button>
+      <button class="settings-close-btn" onclick="closeSettings()">Done</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
