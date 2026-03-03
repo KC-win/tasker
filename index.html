@@ -671,6 +671,7 @@ function renderTasks(){
   document.getElementById('completed-count').textContent=done.length;
   renderTaskList('active-list',active,false);
   renderTaskList('completed-list',done,true);
+  if(currentTab==='calendar') renderCalendar();
 }
 function mf(t){
   const catOk = currentFilter==='all'||t.category===currentFilter;
@@ -1334,12 +1335,7 @@ function calClickDay(dstr){
   setCalView('week');
 }
 
-// Re-render calendar when tasks update (hook into existing renderTasks)
-const _origRenderTasks=renderTasks;
-function renderTasks(){
-  _origRenderTasks();
-  if(currentTab==='calendar') renderCalendar();
-}
+// Calendar re-renders via renderTasks hook (inline below)
 
 // Init calendar hidden views
 document.addEventListener('DOMContentLoaded',()=>{
