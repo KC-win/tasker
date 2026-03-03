@@ -72,6 +72,110 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .task-owner-tag.common{background:rgba(251,191,36,.2);color:#fbbf24}
 .task-owner-tag.others{background:rgba(244,114,182,.2);color:#f472b6}
 
+
+/* Edit task modal */
+.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.edit-overlay.open{display:flex}
+.edit-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;max-width:460px;animation:slideIn .2s ease}
+.edit-modal-title{font-size:18px;font-weight:700;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between}
+.edit-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.edit-close:hover{background:var(--surface2);color:var(--text)}
+.edit-field{margin-bottom:16px}
+.edit-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:block}
+.edit-input{width:100%;font-family:var(--font);font-size:15px;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);outline:none;transition:border-color .2s}
+.edit-input:focus{border-color:rgba(91,138,245,.5)}
+.edit-select{width:100%;font-family:var(--font);font-size:14px;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);outline:none;transition:border-color .2s;cursor:pointer}
+.edit-select:focus{border-color:rgba(91,138,245,.5)}
+.edit-select option{background:var(--surface)}
+.edit-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.edit-actions{display:flex;gap:10px;margin-top:24px}
+.edit-actions .btn{flex:1;padding:13px;font-size:14px}
+.edit-assign-row{display:flex;gap:8px;margin-top:6px}
+.edit-assign-btn{flex:1;font-family:var(--font);font-size:13px;font-weight:600;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center}
+.edit-assign-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.edit-assign-btn.common.active{background:#fbbf24;border-color:#fbbf24;color:#000}
+
+
+/* ── CALENDAR TAB ────────────────────────────────────────────────────────── */
+.cal-view-toggle{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px}
+.cal-view-btn{flex:1;font-family:var(--font);font-size:13px;font-weight:600;padding:8px;border:none;border-radius:9px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted)}
+.cal-view-btn.active{background:var(--accent);color:#fff}
+
+/* Calendar nav */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cal-nav-title{font-size:18px;font-weight:700;letter-spacing:-.5px}
+.cal-nav-btns{display:flex;gap:6px}
+.cal-nav-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cal-nav-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.cal-today-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:7px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .2s}
+.cal-today-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── MONTH VIEW ── */
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.month-dow{text-align:center;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:8px 0;margin-bottom:4px}
+.month-day{min-height:80px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 6px;cursor:pointer;transition:all .2s;position:relative}
+.month-day:hover{border-color:rgba(255,255,255,.15);background:var(--surface2)}
+.month-day.today{border-color:var(--accent);background:rgba(91,138,245,.08)}
+.month-day.other-month{opacity:.35}
+.month-day.has-tasks{border-color:rgba(255,255,255,.12)}
+.month-day-num{font-size:12px;font-weight:700;margin-bottom:5px;line-height:1}
+.month-day.today .month-day-num{color:var(--accent)}
+.month-task-dot{font-size:10px;font-weight:600;padding:2px 5px;border-radius:5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;cursor:pointer;transition:opacity .15s}
+.month-task-dot:hover{opacity:.75}
+.month-more{font-size:10px;color:var(--muted);font-weight:600;margin-top:2px}
+
+/* ── WEEK VIEW ── */
+.week-grid{display:grid;grid-template-columns:48px repeat(7,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.week-header-spacer{background:var(--surface2);border-bottom:1px solid var(--border)}
+.week-day-header{background:var(--surface2);border-bottom:1px solid var(--border);border-left:1px solid var(--border);padding:10px 6px;text-align:center}
+.week-day-header .dow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.week-day-header .dnum{font-size:18px;font-weight:800;line-height:1;margin-top:2px}
+.week-day-header.today .dnum{color:var(--accent)}
+.week-time-col{background:var(--surface);border-right:1px solid var(--border)}
+.week-time-label{height:52px;display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 8px 0 0;font-size:10px;font-weight:600;color:var(--muted)}
+.week-day-col{background:var(--surface);border-left:1px solid var(--border);position:relative;min-height:52px}
+.week-day-col.today-col{background:rgba(91,138,245,.04)}
+.week-hour-cell{height:52px;border-bottom:1px solid var(--border);position:relative}
+.week-hour-cell:last-child{border-bottom:none}
+.week-task-block{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 6px;font-size:10px;font-weight:600;cursor:pointer;overflow:hidden;z-index:2;line-height:1.3;transition:opacity .15s}
+.week-task-block:hover{opacity:.8}
+.week-allday-row{display:contents}
+.week-allday-spacer{background:var(--surface2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;justify-content:flex-end}
+.week-allday-cell{background:var(--surface2);border-bottom:1px solid var(--border);border-left:1px solid var(--border);padding:4px;min-height:28px}
+.week-allday-task{font-size:10px;font-weight:600;padding:2px 6px;border-radius:5px;margin-bottom:2px;cursor:pointer;transition:opacity .15s}
+.week-allday-task:hover{opacity:.75}
+
+/* ── AGENDA VIEW ── */
+.agenda-list{display:flex;flex-direction:column;gap:0}
+.agenda-day-group{margin-bottom:4px}
+.agenda-day-header{display:flex;align-items:center;gap:12px;padding:14px 0 8px;position:sticky;top:0;background:var(--bg);z-index:1}
+.agenda-day-circle{width:40px;height:40px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;background:var(--surface);border:1px solid var(--border)}
+.agenda-day-circle.today{background:var(--accent);border-color:var(--accent)}
+.agenda-day-circle .adm{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.7;line-height:1}
+.agenda-day-circle .add{font-size:16px;font-weight:800;line-height:1}
+.agenda-day-label{font-size:14px;font-weight:700}
+.agenda-day-label .aday{font-size:12px;color:var(--muted);font-weight:500;margin-top:1px}
+.agenda-task-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:6px;margin-left:52px;cursor:pointer;transition:all .2s}
+.agenda-task-row:hover{border-color:rgba(255,255,255,.15);background:var(--surface2)}
+.agenda-task-time{font-size:11px;font-weight:700;color:var(--muted);min-width:44px;text-align:right;flex-shrink:0}
+.agenda-task-body{flex:1;min-width:0}
+.agenda-task-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agenda-task-title.done{text-decoration:line-through;color:var(--muted)}
+.agenda-task-cat{font-size:11px;margin-top:2px}
+.agenda-check{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .2s}
+.agenda-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.agenda-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.agenda-empty-icon{font-size:40px;margin-bottom:12px}
+.agenda-empty-text{font-size:15px;font-weight:600}
+.agenda-empty-sub{font-size:13px;margin-top:4px;opacity:.6}
+
+/* Task detail popup from calendar */
+.cal-popup{position:fixed;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;min-width:240px;max-width:300px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:slideIn .15s ease}
+.cal-popup-title{font-size:14px;font-weight:700;margin-bottom:8px}
+.cal-popup-meta{font-size:12px;color:var(--muted);margin-bottom:12px;display:flex;flex-direction:column;gap:3px}
+.cal-popup-actions{display:flex;gap:8px}
+.cal-popup-actions .btn{flex:1;padding:9px;font-size:12px}
+
 /* LOGIN */
 .login-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg)}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:360px;text-align:center}
@@ -284,6 +388,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
   <div class="tabs">
     <button class="tab-btn active" id="tab-tasks" onclick="switchTab('tasks')">📋 Tasks</button>
     <button class="tab-btn" id="tab-sublists" onclick="switchTab('sublists')">📝 Lists</button>
+    <button class="tab-btn" id="tab-calendar" onclick="switchTab('calendar')">📅 Calendar</button>
   </div>
 
 
@@ -375,6 +480,35 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 
 <div class="toast" id="toast"></div>
 
+  <!-- CALENDAR TAB -->
+  <div id="calendar-tab" style="display:none">
+
+    <!-- View toggle -->
+    <div class="cal-view-toggle">
+      <button class="cal-view-btn active" id="cvb-month"  onclick="setCalView('month')">📅 Month</button>
+      <button class="cal-view-btn"        id="cvb-week"   onclick="setCalView('week')">🗓 Week</button>
+      <button class="cal-view-btn"        id="cvb-agenda" onclick="setCalView('agenda')">📋 Agenda</button>
+    </div>
+
+    <!-- Nav -->
+    <div class="cal-nav">
+      <div class="cal-nav-title" id="cal-nav-title">—</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="cal-today-btn" onclick="calGoToday()">Today</button>
+        <div class="cal-nav-btns">
+          <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+          <button class="cal-nav-btn" onclick="calNext()">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Views -->
+    <div id="cal-month-view"></div>
+    <div id="cal-week-view"></div>
+    <div id="cal-agenda-view"></div>
+  </div>
+
+
 <script>
 const SURL='https://ckfamqwyrcjvsjrqnwfo.supabase.co';
 const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrZmFtcXd5cmNqdnNqcnFud2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMzM3MjcsImV4cCI6MjA4NzkwOTcyN30.UnW0b-uuv2yMfhKn8zh_4ibllXl51uK7JtpUREuyOkU';
@@ -420,8 +554,11 @@ function switchTab(tab){
   currentTab=tab;
   document.getElementById('tasks-tab').style.display=tab==='tasks'?'':'none';
   document.getElementById('sublists-tab').style.display=tab==='sublists'?'':'none';
+  document.getElementById('calendar-tab').style.display=tab==='calendar'?'':'none';
   document.getElementById('tab-tasks').classList.toggle('active',tab==='tasks');
   document.getElementById('tab-sublists').classList.toggle('active',tab==='sublists');
+  document.getElementById('tab-calendar').classList.toggle('active',tab==='calendar');
+  if(tab==='calendar') renderCalendar();
 }
 
 // ── TASKS ─────────────────────────────────────────────────────────────────────
@@ -845,6 +982,373 @@ function closeSettingsOutside(e) { if(e.target===document.getElementById('settin
   if (saved) { try { applyTheme(JSON.parse(saved), false); } catch(e){} }
 })();
 
+
+// ── EDIT TASK ─────────────────────────────────────────────────────────────────
+let editingTaskId = null;
+
+function openEditTask(id) {
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  editingTaskId = id;
+
+  document.getElementById('edit-title').value = t.title || '';
+  document.getElementById('edit-category').value = t.category || 'Personal';
+
+  // Split datetime into date + time
+  if (t.due_date) {
+    const hasTime = t.due_date.includes('T') && t.due_date.length > 10;
+    document.getElementById('edit-date').value = t.due_date.split('T')[0];
+    document.getElementById('edit-time').value = hasTime ? t.due_date.split('T')[1].substring(0,5) : '';
+  } else {
+    document.getElementById('edit-date').value = '';
+    document.getElementById('edit-time').value = '';
+  }
+
+  // Set task type
+  const isCommon = t.task_type === 'common';
+  document.getElementById('edit-assign-mine').classList.toggle('active', !isCommon);
+  document.getElementById('edit-assign-common').classList.toggle('active', isCommon);
+
+  document.getElementById('edit-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('edit-title').focus(), 100);
+}
+
+function closeEditTask() {
+  document.getElementById('edit-overlay').classList.remove('open');
+  editingTaskId = null;
+}
+
+function setEditAssign(type) {
+  document.getElementById('edit-assign-mine').classList.toggle('active', type === 'personal');
+  document.getElementById('edit-assign-common').classList.toggle('active', type === 'common');
+  document.getElementById('edit-assign-mine').dataset.val = type === 'personal' ? 'personal' : '';
+  document.getElementById('edit-assign-common').dataset.val = type === 'common' ? 'common' : '';
+}
+
+async function saveEditTask() {
+  if (!editingTaskId) return;
+  const title = document.getElementById('edit-title').value.trim();
+  if (!title) { document.getElementById('edit-title').focus(); return; }
+
+  const category = document.getElementById('edit-category').value;
+  const date = document.getElementById('edit-date').value;
+  const time = document.getElementById('edit-time').value;
+  const dueFull = date ? (time ? date + 'T' + time : date) : null;
+  const isCommon = document.getElementById('edit-assign-common').classList.contains('active');
+  const task_type = isCommon ? 'common' : 'personal';
+
+  const { error } = await db.from('tasks').update({
+    title, category, due_date: dueFull, task_type
+  }).eq('id', editingTaskId);
+
+  if (error) { showToast('Error saving ✕'); return; }
+  showToast('Task updated ✓');
+  closeEditTask();
+}
+
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+let calView = 'month';       // 'month' | 'week' | 'agenda'
+let calDate = new Date();    // anchor date
+const DAYS_SHORT  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function setCalView(v){
+  calView = v;
+  ['month','week','agenda'].forEach(x=>{
+    document.getElementById('cvb-'+x).classList.toggle('active', x===v);
+    document.getElementById('cal-'+x+'-view').style.display = x===v ? '' : 'none';
+  });
+  renderCalendar();
+}
+
+function calGoToday(){ calDate=new Date(); renderCalendar(); }
+function calPrev(){
+  if(calView==='month'){ calDate=new Date(calDate.getFullYear(), calDate.getMonth()-1, 1); }
+  else if(calView==='week'){ calDate=new Date(calDate.getTime()-7*864e5); }
+  else { calDate=new Date(calDate.getFullYear(), calDate.getMonth()-1, 1); }
+  renderCalendar();
+}
+function calNext(){
+  if(calView==='month'){ calDate=new Date(calDate.getFullYear(), calDate.getMonth()+1, 1); }
+  else if(calView==='week'){ calDate=new Date(calDate.getTime()+7*864e5); }
+  else { calDate=new Date(calDate.getFullYear(), calDate.getMonth()+1, 1); }
+  renderCalendar();
+}
+
+function renderCalendar(){
+  // Hide all, show current
+  ['month','week','agenda'].forEach(x=>{
+    const el = document.getElementById('cal-'+x+'-view');
+    if(el) el.style.display = x===calView ? '' : 'none';
+  });
+  if(calView==='month')  renderMonth();
+  if(calView==='week')   renderWeek();
+  if(calView==='agenda') renderAgenda();
+}
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+function taskDateStr(t){ return t.due_date ? t.due_date.split('T')[0] : null; }
+function taskTimeStr(t){
+  if(!t.due_date || !t.due_date.includes('T')) return null;
+  return t.due_date.split('T')[1].substring(0,5);
+}
+function fmtTime12(str){ // "14:30" -> "2:30 PM"
+  if(!str) return '';
+  const [h,m] = str.split(':').map(Number);
+  const ap = h>=12?'PM':'AM', h12=h%12||12;
+  return h12+':'+(m<10?'0':'')+m+' '+ap;
+}
+function isoDate(d){ return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate(); }
+function todayStr(){ return isoDate(new Date()); }
+function getCatColor(cat){ return (CATS[cat]||CATS.Work).color; }
+function getCatBg(cat){ return (CATS[cat]||CATS.Work).bg; }
+
+// ── MONTH VIEW ────────────────────────────────────────────────────────────────
+function renderMonth(){
+  const y=calDate.getFullYear(), m=calDate.getMonth();
+  document.getElementById('cal-nav-title').textContent = MONTHS_LONG[m]+' '+y;
+  const firstDay=new Date(y,m,1).getDay();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const daysInPrev=new Date(y,m,0).getDate();
+  const today=todayStr();
+
+  // Build task map by date
+  const taskMap={};
+  tasks.forEach(t=>{ const d=taskDateStr(t); if(d){(taskMap[d]=taskMap[d]||[]).push(t);} });
+
+  let html='<div class="month-grid">';
+  DAYS_SHORT.forEach(d=>html+=`<div class="month-dow">${d}</div>`);
+
+  // Prev month days
+  for(let i=firstDay-1;i>=0;i--){
+    const day=daysInPrev-i, dStr=isoDate(new Date(y,m-1,day));
+    html+=`<div class="month-day other-month" onclick="calClickDay('${dStr}')"><div class="month-day-num">${day}</div></div>`;
+  }
+
+  // Current month
+  for(let d=1;d<=daysInMonth;d++){
+    const dStr=isoDate(new Date(y,m,d));
+    const isToday=dStr===today;
+    const dayTasks=taskMap[dStr]||[];
+    const visible=dayTasks.slice(0,3);
+    const more=dayTasks.length-3;
+    html+=`<div class="month-day ${isToday?'today':''} ${dayTasks.length?'has-tasks':''}" onclick="calClickDay('${dStr}')">`;
+    html+=`<div class="month-day-num">${d}</div>`;
+    visible.forEach(t=>{
+      const col=getCatColor(t.category), bg=getCatBg(t.category);
+      const done=t.done?'opacity:.4;text-decoration:line-through;':'';
+      html+=`<div class="month-task-dot" style="color:${col};background:${bg};${done}" onclick="event.stopPropagation();calTaskClick(event,'${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
+    });
+    if(more>0) html+=`<div class="month-more">+${more} more</div>`;
+    html+='</div>';
+  }
+
+  // Next month padding
+  const total=firstDay+daysInMonth;
+  const nextDays=total%7===0?0:7-(total%7);
+  for(let d=1;d<=nextDays;d++){
+    const dStr=isoDate(new Date(y,m+1,d));
+    html+=`<div class="month-day other-month" onclick="calClickDay('${dStr}')"><div class="month-day-num">${d}</div></div>`;
+  }
+  html+='</div>';
+  document.getElementById('cal-month-view').innerHTML=html;
+}
+
+// ── WEEK VIEW ─────────────────────────────────────────────────────────────────
+function renderWeek(){
+  // Get start of week (Sunday)
+  const d=new Date(calDate); d.setDate(d.getDate()-d.getDay());
+  const days=[]; for(let i=0;i<7;i++){ const x=new Date(d); x.setDate(d.getDate()+i); days.push(x); }
+  const today=todayStr();
+
+  // Nav title
+  const s=days[0], e=days[6];
+  document.getElementById('cal-nav-title').textContent =
+    MONTHS_LONG[s.getMonth()].slice(0,3)+' '+s.getDate()+' – '+
+    (s.getMonth()!==e.getMonth()?MONTHS_LONG[e.getMonth()].slice(0,3)+' ':'')+e.getDate()+', '+e.getFullYear();
+
+  // Map tasks by date
+  const taskMap={};
+  tasks.forEach(t=>{ const dstr=taskDateStr(t); if(dstr){(taskMap[dstr]=taskMap[dstr]||[]).push(t);} });
+
+  const HOURS=Array.from({length:24},(_,i)=>i);
+  let html='<div class="week-grid">';
+
+  // Header row
+  html+='<div class="week-header-spacer"></div>';
+  days.forEach(day=>{
+    const isToday=isoDate(day)===today;
+    html+=`<div class="week-day-header ${isToday?'today':''}">
+      <div class="dow">${DAYS_SHORT[day.getDay()]}</div>
+      <div class="dnum">${day.getDate()}</div>
+    </div>`;
+  });
+
+  // All-day row
+  html+='<div class="week-allday-spacer">All day</div>';
+  days.forEach(day=>{
+    const dstr=isoDate(day);
+    const isToday=dstr===today;
+    const allDay=(taskMap[dstr]||[]).filter(t=>!taskTimeStr(t));
+    html+=`<div class="week-allday-cell ${isToday?'today-col':''}">`;
+    allDay.forEach(t=>{
+      const col=getCatColor(t.category),bg=getCatBg(t.category);
+      const done=t.done?'opacity:.4;text-decoration:line-through;':'';
+      html+=`<div class="week-allday-task" style="color:${col};background:${bg};${done}" onclick="calTaskClick(event,'${t.id}')" title="${esc(t.title)}">${esc(t.title)}</div>`;
+    });
+    html+='</div>';
+  });
+
+  // Hour rows
+  HOURS.forEach(h=>{
+    const timeLabel=h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM';
+    html+=`<div class="week-time-col"><div class="week-time-label">${timeLabel}</div></div>`;
+    days.forEach(day=>{
+      const dstr=isoDate(day);
+      const isToday=dstr===today;
+      const hourTasks=(taskMap[dstr]||[]).filter(t=>{
+        const ts=taskTimeStr(t); if(!ts) return false;
+        return parseInt(ts.split(':')[0])===h;
+      });
+      html+=`<div class="week-day-col ${isToday?'today-col':''}"><div class="week-hour-cell">`;
+      hourTasks.forEach((t,i)=>{
+        const col=getCatColor(t.category),bg=getCatBg(t.category);
+        const ts=taskTimeStr(t)||'';
+        const done=t.done?'opacity:.4;text-decoration:line-through;':'';
+        const mins=ts?parseInt(ts.split(':')[1]):0;
+        const top=Math.round(mins/60*52);
+        html+=`<div class="week-task-block" style="color:${col};background:${bg};top:${top}px;left:${2+i*40}%;right:${2}%;${done}" onclick="calTaskClick(event,'${t.id}')">${fmtTime12(ts)} ${esc(t.title)}</div>`;
+      });
+      html+='</div></div>';
+    });
+  });
+
+  html+='</div>';
+  document.getElementById('cal-week-view').innerHTML=html;
+}
+
+// ── AGENDA VIEW ───────────────────────────────────────────────────────────────
+function renderAgenda(){
+  const today=todayStr();
+  // Show 90 days ahead + 30 behind
+  const start=new Date(); start.setDate(start.getDate()-30);
+  const tasksWithDates=tasks.filter(t=>taskDateStr(t)).sort((a,b)=>(a.due_date||'').localeCompare(b.due_date||''));
+
+  document.getElementById('cal-nav-title').textContent='Agenda';
+  document.getElementById('cal-nav-btns') && (document.querySelector('.cal-nav-btns').style.display='none');
+
+  if(!tasksWithDates.length){
+    document.getElementById('cal-agenda-view').innerHTML=`
+      <div class="agenda-empty">
+        <div class="agenda-empty-icon">📅</div>
+        <div class="agenda-empty-text">No scheduled tasks</div>
+        <div class="agenda-empty-sub">Add a due date to tasks to see them here</div>
+      </div>`;
+    return;
+  }
+
+  // Group by date
+  const groups={};
+  tasksWithDates.forEach(t=>{ const d=taskDateStr(t); (groups[d]=groups[d]||[]).push(t); });
+  const sortedDates=Object.keys(groups).sort();
+
+  let html='<div class="agenda-list">';
+  sortedDates.forEach(dstr=>{
+    const dt=new Date(dstr+'T00:00:00');
+    const isToday=dstr===today;
+    const mon=MONTHS_LONG[dt.getMonth()].slice(0,3).toUpperCase();
+    const dayNum=dt.getDate();
+    const dayName=DAYS_SHORT[dt.getDay()];
+    const fullDate=MONTHS_LONG[dt.getMonth()]+' '+dayNum+', '+dt.getFullYear();
+
+    html+=`<div class="agenda-day-group">
+      <div class="agenda-day-header">
+        <div class="agenda-day-circle ${isToday?'today':''}">
+          <div class="adm">${mon}</div>
+          <div class="add">${dayNum}</div>
+        </div>
+        <div class="agenda-day-label">
+          ${isToday?'<strong>Today</strong>':dayName}
+          <div class="aday">${fullDate}</div>
+        </div>
+      </div>`;
+
+    groups[dstr].forEach(t=>{
+      const ts=taskTimeStr(t);
+      const cat=CATS[t.category]||CATS.Work;
+      const isMe=t.created_by===currentUser?.name;
+      html+=`<div class="agenda-task-row" onclick="calTaskClick(event,'${t.id}')">
+        <button class="agenda-check ${t.done?'done':''}" onclick="event.stopPropagation();toggleDone('${t.id}')">
+          ${t.done?'✓':''}
+        </button>
+        <div class="agenda-task-time">${ts?fmtTime12(ts):'All day'}</div>
+        <div class="agenda-task-body">
+          <div class="agenda-task-title ${t.done?'done':''}">${esc(t.title)}</div>
+          <div class="agenda-task-cat" style="color:${cat.color}">${cat.icon} ${t.category} · ${isMe?'You':esc(t.created_by||'?')}</div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  html+='</div>';
+  document.getElementById('cal-agenda-view').innerHTML=html;
+}
+
+// ── TASK POPUP ────────────────────────────────────────────────────────────────
+let calPopupEl=null;
+function calTaskClick(e, id){
+  e.stopPropagation();
+  closeCalPopup();
+  const t=tasks.find(x=>x.id===id); if(!t) return;
+  const cat=CATS[t.category]||CATS.Work;
+  const ts=taskTimeStr(t);
+  const popup=document.createElement('div');
+  popup.className='cal-popup';
+  popup.innerHTML=`
+    <div class="cal-popup-title">${esc(t.title)}</div>
+    <div class="cal-popup-meta">
+      <span style="color:${cat.color}">${cat.icon} ${t.category}</span>
+      <span>📅 ${fmtDate(t.due_date)}${ts?' · '+fmtTime12(ts):''}</span>
+      <span>👤 ${t.created_by===currentUser?.name?'You':esc(t.created_by||'?')}</span>
+      ${t.done?'<span style="color:var(--green)">✓ Completed</span>':''}
+    </div>
+    <div class="cal-popup-actions">
+      <button class="btn btn-ghost" style="padding:8px;font-size:12px" onclick="toggleDone('${id}');closeCalPopup();setTimeout(renderCalendar,300)">${t.done?'Reopen':'Complete'}</button>
+      <button class="btn btn-primary" style="padding:8px;font-size:12px" onclick="closeCalPopup();openEditTask('${id}')">Edit</button>
+    </div>`;
+  // Position near click
+  const x=Math.min(e.clientX, window.innerWidth-310);
+  const y=Math.min(e.clientY+10, window.innerHeight-200);
+  popup.style.cssText+=`;left:${x}px;top:${y}px`;
+  document.body.appendChild(popup);
+  calPopupEl=popup;
+  setTimeout(()=>document.addEventListener('click',closeCalPopup,{once:true}),50);
+}
+function closeCalPopup(){ if(calPopupEl){calPopupEl.remove();calPopupEl=null;} }
+
+function calClickDay(dstr){
+  closeCalPopup();
+  // Switch to week view on that day
+  calDate=new Date(dstr+'T00:00:00');
+  setCalView('week');
+}
+
+// Re-render calendar when tasks update (hook into existing renderTasks)
+const _origRenderTasks=renderTasks;
+function renderTasks(){
+  _origRenderTasks();
+  if(currentTab==='calendar') renderCalendar();
+}
+
+// Init calendar hidden views
+document.addEventListener('DOMContentLoaded',()=>{
+  ['week','agenda'].forEach(x=>{
+    const el=document.getElementById('cal-'+x+'-view');
+    if(el) el.style.display='none';
+  });
+});
+
 </script>
 
 <!-- Settings Modal -->
@@ -906,6 +1410,57 @@ function closeSettingsOutside(e) { if(e.target===document.getElementById('settin
     <div class="settings-btn-row">
       <button class="settings-reset-btn" onclick="resetTheme()">Reset</button>
       <button class="settings-close-btn" onclick="closeSettings()">Done</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Edit Task Modal -->
+<div class="edit-overlay" id="edit-overlay" onclick="if(event.target===this)closeEditTask()">
+  <div class="edit-modal">
+    <div class="edit-modal-title">
+      ✏️ Edit Task
+      <button class="edit-close" onclick="closeEditTask()">✕</button>
+    </div>
+
+    <div class="edit-field">
+      <label class="edit-label">Task Title</label>
+      <input class="edit-input" id="edit-title" placeholder="Task title..." onkeydown="if(event.key==='Enter')saveEditTask()">
+    </div>
+
+    <div class="edit-field">
+      <label class="edit-label">Category</label>
+      <select class="edit-select" id="edit-category">
+        <option value="Work">💼 Work</option>
+        <option value="Personal" selected>👤 Personal</option>
+        <option value="Urgent">🔥 Urgent</option>
+        <option value="Meetings">👥 Meetings</option>
+        <option value="Admin">📄 Admin</option>
+      </select>
+    </div>
+
+    <div class="edit-row">
+      <div class="edit-field">
+        <label class="edit-label">Due Date</label>
+        <input class="edit-input" id="edit-date" type="date">
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Time (optional)</label>
+        <input class="edit-input" id="edit-time" type="time">
+      </div>
+    </div>
+
+    <div class="edit-field">
+      <label class="edit-label">Task Type</label>
+      <div class="edit-assign-row">
+        <button class="edit-assign-btn active" id="edit-assign-mine" onclick="setEditAssign('personal')">🙋 Mine</button>
+        <button class="edit-assign-btn common" id="edit-assign-common" onclick="setEditAssign('common')">🤝 Common</button>
+      </div>
+    </div>
+
+    <div class="edit-actions">
+      <button class="btn btn-ghost" onclick="closeEditTask()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditTask()">Save Changes</button>
     </div>
   </div>
 </div>
