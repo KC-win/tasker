@@ -71,6 +71,34 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .task-owner-tag.mine{background:rgba(91,138,245,.2);color:var(--accent)}
 .task-owner-tag.common{background:rgba(251,191,36,.2);color:#fbbf24}
 .task-owner-tag.others{background:rgba(244,114,182,.2);color:#f472b6}
+.activity-time{font-size:10px;font-weight:600;color:var(--muted);padding:2px 7px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);letter-spacing:.2px}
+
+/* Priority badges */
+.priority-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;letter-spacing:.3px}
+.priority-high{background:rgba(248,113,113,.18);color:#f87171}
+.priority-med{background:rgba(251,191,36,.18);color:#fbbf24}
+.priority-low{background:rgba(52,211,153,.18);color:#34d399}
+
+/* Today glow */
+.task-item.due-today{border-color:rgba(91,138,245,.4);box-shadow:0 0 0 2px rgba(91,138,245,.1)}
+
+/* Notes field on task */
+.task-notes{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
+
+/* Sort button */
+.sort-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:6px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.sort-btn.active{border-color:var(--accent);color:var(--accent)}
+.sort-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.sort-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.sort-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+
+/* Overdue badge on tab */
+.tab-badge{display:inline-block;font-size:10px;font-weight:700;background:#f87171;color:#fff;border-radius:8px;padding:1px 6px;margin-left:5px;vertical-align:middle}
+
+/* Notes in add/edit */
+.notes-input{width:100%;font-family:var(--font);font-size:13px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);outline:none;resize:vertical;min-height:60px;transition:border-color .2s}
+.notes-input:focus{border-color:rgba(91,138,245,.5)}
+.notes-input::placeholder{color:var(--muted)}
 
 
 /* Edit task modal */
@@ -386,7 +414,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab-btn active" id="tab-tasks" onclick="switchTab('tasks')">📋 Tasks</button>
+    <button class="tab-btn active" id="tab-tasks" onclick="switchTab('tasks')">📋 Tasks<span class="tab-badge" id="overdue-badge" style="display:none">0</span></button>
     <button class="tab-btn" id="tab-sublists" onclick="switchTab('sublists')">📝 Lists</button>
     <button class="tab-btn" id="tab-calendar" onclick="switchTab('calendar')">📅 Calendar</button>
   </div>
@@ -428,17 +456,29 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
           <option value="Admin">📄 Admin</option>
         </select>
         <input type="date" class="date-input" id="due-input"><input type="time" class="date-input" id="time-input" placeholder="Time (optional)" style="width:130px">
+        <select class="meta-select" id="priority-select">
+          <option value="">— Priority —</option>
+          <option value="high">🔴 High</option>
+          <option value="med">🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
         <div class="assign-toggle">
           <span class="assign-label">Assign:</span>
           <button class="assign-btn active" id="assign-mine" onclick="setAssign('mine')">Mine</button>
           <button class="assign-btn" id="assign-common" onclick="setAssign('common')">Common</button>
         </div>
         <button class="btn btn-ghost" onclick="hideMeta()" style="margin-left:auto">Cancel</button>
+        <textarea class="notes-input" id="notes-input" placeholder="Add a note (optional)..." rows="2" style="width:100%;margin-top:8px"></textarea>
       </div>
     </div>
 
+    <div class="sort-row">
+      <span class="sort-label">Sort:</span>
+      <button class="sort-btn active" id="sort-manual" onclick="setSort('manual',this)">Manual</button>
+      <button class="sort-btn" id="sort-due" onclick="setSort('due',this)">📅 Due Date</button>
+      <button class="sort-btn" id="sort-priority" onclick="setSort('priority',this)">🔴 Priority</button>
+    </div>
     <div class="section-header">
-      <span class="section-title">Active</span>
       <span class="section-count" id="active-count" style="background:var(--accent)">0</span>
     </div>
     <div class="task-list" id="active-list"><div class="loading"><div class="spinner"></div>Loading...</div></div>
@@ -520,7 +560,7 @@ const UCOLORS=['#5b8af5','#34d399','#f87171','#fbbf24','#a78bfa','#fb923c','#f47
 const EMOJIS=['🛒','📦','🏠','🎉','💪','✈️','📚','🍔','💊','🎁','🔧','💻','🏋️','🌿','💰','🎯','🐾','🧹'];
 const LIST_COLORS=['#5b8af5','#34d399','#f87171','#fbbf24','#a78bfa','#fb923c','#f472b6','#22d3ee'];
 
-let tasks=[],sublists=[],sublistItems={},currentUser=null,currentFilter='all',ownerFilter='all',taskAssign='mine',showComp=true,dragSrc=null,selectedEmoji='🛒',currentTab='tasks',expandedLists=new Set(),collapsedLists=new Set();
+let tasks=[],sublists=[],sublistItems={},currentUser=null,currentFilter='all',ownerFilter='all',taskAssign='mine',showComp=true,dragSrc=null,selectedEmoji='🛒',currentTab='tasks',expandedLists=new Set(),collapsedLists=new Set(),sortMode='manual';
 
 function ucolor(n){let h=0;for(let c of n)h=c.charCodeAt(0)+((h<<5)-h);return UCOLORS[Math.abs(h)%UCOLORS.length]}
 function lcolor(id){let h=0;for(let c of id)h=c.charCodeAt(0)+((h<<5)-h);return LIST_COLORS[Math.abs(h)%LIST_COLORS.length]}
@@ -573,12 +613,14 @@ async function addTask(){
   const cat=document.getElementById('cat-select').value;
   const due=document.getElementById('due-input').value;
   const time=document.getElementById('time-input').value;
+  const priority=document.getElementById('priority-select').value;
+  const notes=document.getElementById('notes-input').value.trim();
   const maxPos=tasks.filter(t=>!t.done).reduce((m,t)=>Math.max(m,t.position||0),0);
   const dueFull=due?(time?due+'T'+time:due):null;
   const ttype=taskAssign==='common'?'common':'personal';
-  const{error}=await db.from('tasks').insert({title,category:cat,due_date:dueFull||null,done:false,created_by:currentUser.name,position:maxPos+1,task_type:ttype});
+  const{error}=await db.from('tasks').insert({title,category:cat,due_date:dueFull||null,done:false,created_by:currentUser.name,position:maxPos+1,task_type:ttype,priority:priority||null,notes:notes||null});
   if(error){showToast('Error adding task');return;}
-  input.value='';document.getElementById('due-input').value='';document.getElementById('time-input').value='';setAssign('mine');
+  input.value='';document.getElementById('due-input').value='';document.getElementById('time-input').value='';document.getElementById('priority-select').value='';document.getElementById('notes-input').value='';setAssign('mine');
   document.getElementById('add-btn').disabled=true;hideMeta();showToast('Task added ✓');
 }
 async function toggleDone(id){
@@ -660,8 +702,22 @@ function toggleListExpand(id){
 
 // ── RENDER TASKS ──────────────────────────────────────────────────────────────
 function renderTasks(){
-  const active=tasks.filter(t=>!t.done&&mf(t));
+  let active=tasks.filter(t=>!t.done&&mf(t));
   const done=tasks.filter(t=>t.done&&mf(t)).sort((a,b)=>new Date(b.completed_at||0)-new Date(a.completed_at||0));
+
+  // Sort active tasks
+  const PRIO={high:0,med:1,low:2,'':3};
+  if(sortMode==='due'){
+    active=[...active].sort((a,b)=>{
+      if(!a.due_date&&!b.due_date)return 0;
+      if(!a.due_date)return 1;
+      if(!b.due_date)return -1;
+      return new Date(a.due_date)-new Date(b.due_date);
+    });
+  } else if(sortMode==='priority'){
+    active=[...active].sort((a,b)=>(PRIO[a.priority||''])-(PRIO[b.priority||'']));
+  }
+
   const allA=tasks.filter(t=>!t.done).length,allD=tasks.filter(t=>t.done).length,tot=tasks.length,pct=tot?Math.round(allD/tot*100):0;
   const _sr=document.getElementById('stat-remaining');if(_sr)_sr.textContent=allA;
   const _sd=document.getElementById('stat-done');if(_sd)_sd.textContent=allD;
@@ -669,9 +725,21 @@ function renderTasks(){
   const _pf=document.getElementById('progress-fill');if(_pf)_pf.style.width=pct+'%';
   document.getElementById('active-count').textContent=active.length;
   document.getElementById('completed-count').textContent=done.length;
+
+  // Overdue badge
+  const overdueCnt=tasks.filter(t=>!t.done&&fmtDue(t.due_date)==='Overdue').length;
+  const badge=document.getElementById('overdue-badge');
+  if(badge){badge.textContent=overdueCnt;badge.style.display=overdueCnt>0?'':'none';}
+
   renderTaskList('active-list',active,false);
   renderTaskList('completed-list',done,true);
   if(currentTab==='calendar') renderCalendar();
+}
+function setSort(mode,btn){
+  sortMode=mode;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTasks();
 }
 function mf(t){
   const catOk = currentFilter==='all'||t.category===currentFilter;
@@ -698,18 +766,34 @@ function renderTaskList(id,items,isDone){
   el.innerHTML=items.map((t,i)=>tHTML(t,i,items.length,isDone)).join('');
   if(!isDone)el.querySelectorAll('.task-item').forEach(r=>{r.addEventListener('dragstart',onDS);r.addEventListener('dragover',onDO);r.addEventListener('dragleave',onDL);r.addEventListener('drop',onDP);r.addEventListener('dragend',onDE);});
 }
+function fmtTime(ts){
+  if(!ts)return'';
+  const d=new Date(ts);
+  if(isNaN(d))return'';
+  return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
 function tHTML(t,i,tot,isDone){
-  const cat=CATS[t.category]||CATS.Work,due=fmtDue(t.due_date),dc=due==='Today'?'today':due==='Overdue'?'overdue':'',ac=ucolor(t.created_by||'?'),isMe=t.created_by===currentUser?.name;const isCommon=t.task_type==='common';const ownerTagClass=isCommon?'common':isMe?'mine':'others';const ownerTagText=isCommon?'🤝 Common':isMe?'':'';
-  return '<div class="task-item '+(isDone?'completed':'')+'" data-id="'+t.id+'" draggable="'+(!isDone)+'">'
+  const cat=CATS[t.category]||CATS.Work,due=fmtDue(t.due_date),dc=due==='Today'?'today':due==='Overdue'?'overdue':'',ac=ucolor(t.created_by||'?'),isMe=t.created_by===currentUser?.name;const isCommon=t.task_type==='common';
+  const dueTime=(t.due_date&&t.due_date.includes('T'))?fmtTime(t.due_date):'';
+  const isToday=due==='Today';
+  const PLABEL={high:['🔴 High','priority-high'],med:['🟡 Med','priority-med'],low:['🟢 Low','priority-low']};
+  const pl=t.priority?PLABEL[t.priority]:null;
+  return '<div class="task-item '+(isDone?'completed':'')+(isToday&&!isDone?' due-today':'')+'" data-id="'+t.id+'" draggable="'+(!isDone)+'">'
     +(!isDone?'<span class="drag-handle">⠿</span>':'')
     +'<button class="check-btn '+(isDone?'done':'')+'" onclick="toggleDone(\''+t.id+'\')">'
     +'<svg class="check-icon" width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
     +'<div class="task-body"><div class="task-title">'+esc(t.title)+'</div>'
     +'<div class="task-meta"><span class="cat-badge" style="color:'+cat.color+';background:'+cat.bg+'">'+cat.icon+' '+t.category+'</span>'
-    +(due?'<span class="due-badge '+dc+'">📅 '+due+'</span>':'')
+    +(pl?'<span class="priority-badge '+pl[1]+'">'+pl[0]+'</span>':'')
+    +(due?'<span class="due-badge '+dc+'">📅 '+due+(dueTime?' ⏰ '+dueTime:'')+'</span>':'')
     +(isCommon?'<span class="task-owner-tag common">🤝 Common</span>':'')
-    +'<span class="added-by"><span class="added-by-dot" style="background:'+ac+'">'+(t.created_by||'?')[0].toUpperCase()+'</span>'+(isMe?'You':esc(t.created_by||'?'))+'</span></div></div>'
+    +'<span class="added-by"><span class="added-by-dot" style="background:'+ac+'">'+(t.created_by||'?')[0].toUpperCase()+'</span>'+(isMe?'You':esc(t.created_by||'?'))+'</span>'
+    +'</div>'
+    +(t.notes?'<div class="task-notes">'+esc(t.notes)+'</div>':'')
+    +'</div>'
     +'<div class="task-actions">'
+    +(!isDone?'<button class="action-btn" onclick="openEditTask(\''+t.id+'\')" title="Edit">✏️</button>':'')
     +(!isDone?'<button class="action-btn" onclick="moveUp(\''+t.id+'\')"'+(i===0?' style="opacity:.3;cursor:default"':'')+'>↑</button>'
     +'<button class="action-btn" onclick="moveDown(\''+t.id+'\')"'+(i===tot-1?' style="opacity:.3;cursor:default"':'')+'>↓</button>':'')
     +'<button class="action-btn delete" onclick="deleteTask(\''+t.id+'\')">✕</button></div></div>';
@@ -867,11 +951,13 @@ function toggleCompleted(){
 }
 function fmtDue(due){
   if(!due)return'';
-  const hasTime=due.includes('T') && due.length>10;
+  const now=new Date();
   const today=new Date();today.setHours(0,0,0,0);
-  const d=new Date(due+'T00:00:00');
-  if(d<today)return'Overdue';
-  const timeStr=hasTime?(' '+new Date(due).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})):'';
+  const hasTime=due.includes('T')&&due.length>10;
+  const d=hasTime?new Date(due):new Date(due+'T00:00:00');
+  // Time-aware overdue: if has time, compare to now; otherwise compare to start of today
+  if(hasTime){if(d<now)return'Overdue';}
+  else{if(d<today)return'Overdue';}
   if(d.getTime()===today.getTime())return'Today';
   const tom=new Date(today);tom.setDate(today.getDate()+1);
   if(d.getTime()===tom.getTime())return'Tomorrow';
@@ -1009,6 +1095,9 @@ function openEditTask(id) {
     document.getElementById('edit-time').value = '';
   }
 
+  document.getElementById('edit-priority').value = t.priority || '';
+  document.getElementById('edit-notes').value = t.notes || '';
+
   // Set task type
   const isCommon = t.task_type === 'common';
   document.getElementById('edit-assign-mine').classList.toggle('active', !isCommon);
@@ -1039,11 +1128,13 @@ async function saveEditTask() {
   const date = document.getElementById('edit-date').value;
   const time = document.getElementById('edit-time').value;
   const dueFull = date ? (time ? date + 'T' + time : date) : null;
+  const priority = document.getElementById('edit-priority').value;
+  const notes = document.getElementById('edit-notes').value.trim();
   const isCommon = document.getElementById('edit-assign-common').classList.contains('active');
   const task_type = isCommon ? 'common' : 'personal';
 
   const { error } = await db.from('tasks').update({
-    title, category, due_date: dueFull, task_type
+    title, category, due_date: dueFull, task_type, priority: priority||null, notes: notes||null
   }).eq('id', editingTaskId);
 
   if (error) { showToast('Error saving ✕'); return; }
@@ -1448,6 +1539,21 @@ document.addEventListener('DOMContentLoaded',()=>{
         <label class="edit-label">Time (optional)</label>
         <input class="edit-input" id="edit-time" type="time">
       </div>
+    </div>
+
+    <div class="edit-field">
+      <label class="edit-label">Priority</label>
+      <select class="edit-select" id="edit-priority">
+        <option value="">— None —</option>
+        <option value="high">🔴 High</option>
+        <option value="med">🟡 Medium</option>
+        <option value="low">🟢 Low</option>
+      </select>
+    </div>
+
+    <div class="edit-field">
+      <label class="edit-label">Notes</label>
+      <textarea class="notes-input" id="edit-notes" placeholder="Add a note..."></textarea>
     </div>
 
     <div class="edit-field">
